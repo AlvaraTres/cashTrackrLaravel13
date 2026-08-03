@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\SignUpRequest;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
@@ -16,6 +18,12 @@ class RegisterController extends Controller
     public function store(SignUpRequest $request){
         $data = $request->validated();
 
-        User::create($data);
+        $user = User::create($data);
+
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect()->route('verification.notice');
     }
 }

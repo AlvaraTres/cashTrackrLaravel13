@@ -1,11 +1,16 @@
 @extends('layouts.auth')
 
 @section('title')
-    LogIn
+    Iniciar Sesión
 @endsection
 
 @section('auth-contents')
-<form class="mt-14 space-y-5" novalidate>
+
+@if(session('error'))
+    <x-alert type="error" :message="session('error')" />
+@endif
+
+<form method="POST" action="{{ route('login.store') }}" class="mt-14 space-y-5" novalidate>
     <div class="flex flex-col gap-2">
         <label class="font-bold text-2xl" for="email">Email</label>
 
@@ -15,9 +20,12 @@
             placeholder="Email de Registro"
             class="w-full border border-gray-300 p-3 rounded-lg" 
             name="email" 
-            tabindex="1" 
+            tabindex="1"
+            value="{{ old('email') }}"
         />
     </div>
+
+    <x-input-error field="email" />
 
     <div class="flex flex-col gap-2">
         <div class="flex  items-center justify-between">
@@ -37,5 +45,7 @@
         value='Iniciar Sesión'
         class="bg-purple-950 hover:bg-purple-800 w-full p-3 rounded-lg text-white font-bold  text-xl cursor-pointer" 
     />
+
+    <x-input-error field="password" />
 </form>
 @endsection
